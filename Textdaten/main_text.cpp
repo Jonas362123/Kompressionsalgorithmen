@@ -19,6 +19,7 @@ bool isSeperator(char c) {
 }
 
 bool countWords() {
+    if (str.size() == 0) return false;
     for (int i = 0; i < str.size(); i++) { // again looping through every character
         if (isSeperator(str[i])) { // check if character is a seperator
             if (m.count(tmp) == 0) { // check if the word is not in the map
@@ -36,6 +37,7 @@ bool countWords() {
             l_count += 1; // increase letter count
         }
     }
+    if (w_count == 0 || l_count == 0) return false;
     return true;
 }
 
