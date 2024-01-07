@@ -127,7 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LZW.cpp" />
     <ClCompile Include="main_comp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LZW.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,3 +1,12 @@
+/*
+Programmiert von Jonas Ramrath
+Teile des Codes sind inspiriert von:
+
+https://en.cppreference.com/w/cpp/container/map
+
+*/
+
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -7,8 +16,9 @@
 bool exitProgram;
 bool showContent;
 bool showUniqueWords;
-int w_count;
-int l_count;
+int w_count; // Wörter
+int l_count; // Buchstaben/Letter
+int non_alnum; // Count für nicht alphanumerische Zeichen
 std::string str;
 
 std::map<std::string, int> m; // map for storing words {word, count}
@@ -46,9 +56,10 @@ void print() {
         std::cout << str << "\n";
 
     std::cout << "Wordcount: " << std::to_string(w_count) // print amount of words
-    << "\nLettercount: " << std::to_string(l_count) // print amount of letters
-    << "\nAverage wordlength: " << std::to_string((float)l_count / (float)w_count) // print average amount of letters in a word
-    << "\nUnique words: " << std::to_string(m.size()); // print number of elements in the map (amount of unique words)
+        << "\nLettercount: " << std::to_string(l_count) // print amount of letters
+        << "\nAverage wordlength: " << std::to_string((float)l_count / (float)w_count) // print average amount of letters in a word
+        << "\nUnique words: " << std::to_string(m.size()) // print number of elements in the map (amount of unique words)
+        << "\nNon alphanumeric: " << std::to_string(non_alnum); // print amount of non alphanumeric
 
     if (showUniqueWords) {
         std::cout << "\n\n";
@@ -77,12 +88,14 @@ int main()
     while (std::getline(fs, line)) { // fill content line by line
         str += line += "\n";
     }
+
     fs.close(); // Important :)
 
     for (int i = 0; i < str.size(); i++) { // loop through every character
         str[i] = tolower(str[i]);
         if (!std::isalnum(str[i]) && !isSeperator(str[i])) {
             str.erase(str.begin() + i); // erase everything that is not alphanumeric or a seperator so that only words remain
+            non_alnum++;
             i--;
         }
         if (isSeperator(str[i]) && isSeperator(str[i - 1])) {
