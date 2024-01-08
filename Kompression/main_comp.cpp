@@ -21,8 +21,10 @@ std::string fPath;
 std::string fPath_comp;
 std::string line;
 std::string input;
+std::string output;
 int menu_index;
 int menu_index_max;
+int menu_state;
 
 static void init_variables() {
 	exitProgram = false;
@@ -30,8 +32,10 @@ static void init_variables() {
 	fPath_comp = "C:\\compressed.txt";
 	line = "";
 	input = "";
+	output = "";
 	menu_index = 0;
 	menu_index_max = 1;
+	menu_state = 0;
 }
 
 static void init_filestream() { // same as in the other main file
@@ -54,12 +58,66 @@ static void clear() {
 
 static void print_menu() {
 	clear();
-	std::cout << "Input file: " << fPath << "\nOutput file: " << fPath_comp;
+	if (menu_state == 0) {
+		std::cout << "Input file: " << fPath
+			<< "\nOutput file: " << fPath_comp << "\n\n";
 
+		if (menu_index == 0) std::cout << ">";
+		std::cout << "\tLempel-Ziv-Welch\n\n";
+		if (menu_index == 1) std::cout << ">";
+		std::cout << "\tExit\n";
+	}
+	else if (menu_state == 1) {
+		std::cout << "Encoding...";
+	}
+	else if (menu_state == 2) {
+		std::cout << output;
+	}
 }
 
 static void init_menu() {
 	print_menu();
+}
+
+static void lzw() {
+	LZW e(input);
+	for (int v : e.output) {
+		output += std::to_string(v) += " ";
+	}
+	menu_state++;
+}
+
+static bool process_input() {
+	bool update_menu = false;
+	if (menu_state == 0) {
+		if (GetAsyncKeyState(VK_UP) && menu_index > 0) {
+			menu_index--;
+			update_menu = true;
+		}
+		else if (GetAsyncKeyState(VK_DOWN) && menu_index < menu_index_max) {
+			menu_index++;
+			update_menu = true;
+		}
+		else if (GetAsyncKeyState(VK_RIGHT)) {
+			switch (menu_index) {
+			case 0:
+				menu_state++;
+				update_menu = true;
+				lzw();
+				break;
+			case 1:
+				exitProgram = true;
+				break;
+			}
+		}
+	}
+	else if (menu_state == 2) {
+		if (GetAsyncKeyState(VK_RIGHT)) {
+			menu_state = 0;
+			update_menu = true;
+		}
+	}
+	return update_menu;
 }
 
 int main()
@@ -70,9 +128,9 @@ int main()
 
 	while (!exitProgram) {
 
+		if (process_input()) // processes the input and returns true for updating the menu
+			print_menu();
 
-
-		if (GetAsyncKeyState(VK_F1)) exitProgram = true;
 	}
 
 	return 0; // end of program obviously
