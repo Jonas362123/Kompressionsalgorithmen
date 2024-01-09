@@ -29,7 +29,7 @@ int menu_state;
 static void init_variables() {
 	exitProgram = false;
 	fPath = "C:\\uncompressed.txt";
-	fPath_comp = "C:\\compressed.txt";
+	fPath_comp = "C:\\compressed.bin";
 	line = "";
 	input = "";
 	output = "";
@@ -81,9 +81,8 @@ static void lzw() {
 	for (int v : e.output) {
 		output += std::to_string(v) += " ";
 	}
-	std::fstream ofs;
-	ofs.open(fPath_comp, std::fstream::out);
-	ofs.write(output.c_str(), output.size());
+	std::ofstream ofs(fPath_comp, std::ofstream::binary);
+	ofs.write((char*)&e.output, sizeof(e.output));
 	ofs.close();
 }
 
