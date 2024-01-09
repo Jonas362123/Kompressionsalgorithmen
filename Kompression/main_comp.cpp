@@ -39,9 +39,9 @@ static void init_variables() {
 }
 
 static void init_filestream() { // same as in the other main file
-	std::fstream fs;
+	std::ifstream fs;
 
-	fs.open(fPath, std::ios_base::in); // Datei zur Auslesung öffnen
+	fs.open(fPath, std::fstream::in); // Datei zur Auslesung öffnen
 	if (!fs.is_open())
 		std::cout << "failed to open file\n"; // Falls der Pfad nicht existiert oder die Datei nicht geöffnet werden kann
 
@@ -68,9 +68,6 @@ static void print_menu() {
 		std::cout << "\tExit\n";
 	}
 	else if (menu_state == 1) {
-		std::cout << "Encoding...";
-	}
-	else if (menu_state == 2) {
 		std::cout << output;
 	}
 }
@@ -84,7 +81,10 @@ static void lzw() {
 	for (int v : e.output) {
 		output += std::to_string(v) += " ";
 	}
-	menu_state++;
+	std::fstream ofs;
+	ofs.open(fPath_comp, std::fstream::out);
+	ofs.write(output.c_str(), output.size());
+	ofs.close();
 }
 
 static bool process_input() {
@@ -101,9 +101,9 @@ static bool process_input() {
 		else if (GetAsyncKeyState(VK_RIGHT)) {
 			switch (menu_index) {
 			case 0:
-				menu_state++;
-				update_menu = true;
 				lzw();
+				menu_state++;
+				update_menu = true; 
 				break;
 			case 1:
 				exitProgram = true;
@@ -111,8 +111,8 @@ static bool process_input() {
 			}
 		}
 	}
-	else if (menu_state == 2) {
-		if (GetAsyncKeyState(VK_RIGHT)) {
+	else if (menu_state == 1) {
+		if (GetAsyncKeyState(VK_LEFT)) {
 			menu_state = 0;
 			update_menu = true;
 		}
