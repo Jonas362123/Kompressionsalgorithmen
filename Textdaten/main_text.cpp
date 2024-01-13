@@ -24,11 +24,11 @@ std::string str;
 std::map<std::string, int> m; // map for storing words {word, count}
 std::string tmp = ""; // temporary string to store words into the map
 
-bool isSeperator(char c) {
+static bool isSeperator(char c) {
     return c == ' ' || c == '\n';
 }
 
-bool countWords() {
+static bool countWords() {
     if (str.size() == 0) return false;
     for (int i = 0; i < str.size(); i++) { // again looping through every character
         if (isSeperator(str[i])) { // check if character is a seperator
@@ -51,7 +51,9 @@ bool countWords() {
     return true;
 }
 
-void print() {
+static void print() {
+    std::cout << "Analyser by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
+
     if (showContent)
         std::cout << str << "\n";
 
@@ -71,17 +73,17 @@ void print() {
 int main()
 {
     exitProgram = false;
-    showContent = true;
+    showContent = false;
     showUniqueWords = true;
     w_count = 0;
     l_count = 0;
     str = "";
 
     std::fstream fs;
-    std::string fPath = "C:\\test.txt"; // Pfad zur Datei
+    std::string filePath = "C:\\uncompressed.txt"; // Pfad zur Datei
     std::string line = "";
 
-    fs.open(fPath, std::ios_base::in); // Datei zur Auslesung öffnen
+    fs.open(filePath, std::ios_base::in); // Datei zur Auslesung öffnen
     if (!fs.is_open())
         std::cout << "failed to open file"; // Falls der Pfad nicht existiert oder die Datei nicht geöffnet werden kann
 

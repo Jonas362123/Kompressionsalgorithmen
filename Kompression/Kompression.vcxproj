@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="LZW.cpp" />
     <ClCompile Include="main_comp.cpp" />
+    <ClCompile Include="Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LZW.h" />
+    <ClInclude Include="Menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

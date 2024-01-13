@@ -12,125 +12,98 @@ http://web.mit.edu/6.02/www/s2012/handouts/3.pdf (07.01.2024)
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <Windows.h>
 #include "LZW.h"
+#include "Menu.h"
 
 // declaring starting variables
 bool exitProgram;
-std::string fPath;
-std::string fPath_comp;
-std::string line;
+std::string filePath;
+std::string filePath_c;
 std::string input;
-std::string output;
-int menu_index;
-int menu_index_max;
-int menu_state;
 
-static void init_variables() {
-	exitProgram = false;
-	fPath = "C:\\uncompressed.txt";
-	fPath_comp = "C:\\compressed.bin";
-	line = "";
-	input = "";
-	output = "";
-	menu_index = 0;
-	menu_index_max = 1;
-	menu_state = 0;
+static void wait() {
+	Sleep(150);
 }
 
-static void init_filestream() { // same as in the other main file
+static void init_variables() { // defining starting variables
+	exitProgram = false;
+	filePath = "C:\\uncompressed.txt";
+	filePath_c = "C:\\compressed.bin";
+	input = "";
+}
+
+static void init_filestream(Menu* m) {
 	std::ifstream fs;
 
-	fs.open(fPath, std::fstream::in); // Datei zur Auslesung öffnen
-	if (!fs.is_open())
-		std::cout << "failed to open file\n"; // Falls der Pfad nicht existiert oder die Datei nicht geöffnet werden kann
-
-	while (std::getline(fs, line)) { // fill content line by line
-		input += line += "\n";
+	fs.open(filePath, std::ifstream::in); // Datei zur Auslesung öffnen
+	if (!fs.is_open()) {
+		m->setfileError(1); // Falls der Pfad nicht existiert oder die Datei nicht geöffnet werden kann
+		m->print();
 	}
+	std::stringstream ss;
+	ss << fs.rdbuf(); // write the file buffer into the stringstream
+	input = ss.str(); // write the string into input
 
 	fs.close(); // Important :)
 }
 
-static void clear() {
-	system("cls");
+static void lzw(Menu* m) {
+	LZW enc(input); // calls the lzw constructor
+	std::vector<int> vec = enc.output; // set the output to a local variable
+	std::ofstream ofs(filePath_c, std::ofstream::binary | std::ofstream::out); // outputfilestream for writing encoded data to a file
+	if (ofs.is_open())
+		ofs.write((char*)&vec[0], vec.size() * sizeof(int));
+	else
+		m->setfileError(2); // dont need another m->print(); because the menu is already being updated after the function
+	ofs.close(); // closing file
 }
 
-static void print_menu() {
-	clear();
-	if (menu_state == 0) {
-		std::cout << "Input file: " << fPath
-			<< "\nOutput file: " << fPath_comp << "\n\n";
-
-		if (menu_index == 0) std::cout << ">";
-		std::cout << "\tLempel-Ziv-Welch\n\n";
-		if (menu_index == 1) std::cout << ">";
-		std::cout << "\tExit\n";
+static bool main_loop(Menu* m) { // runs every frame the program is not sleeping
+	bool menu_update = false;
+	switch (m->process_input()) { // different output based on what key you press
+	case 0: // first menu option
+		lzw(m); // encode using lzw
+		menu_update = true;
+		break;
+	case 1: // second menu option
+		// lz77();
+		menu_update = true;
+		break;
+	case 2: // third menu option
+		// shannon();
+		menu_update = true;
+		break;
+	case 3: // fourth menu option
+		// huffman();
+		menu_update = true;
+		break;
+	case 4: // fifth menu option to exit
+		exitProgram = true; // breaks the main loop to terminate the program
+		break;
+	case 5: // no menu update (nothing happens)
+		break;
+	case 6: // only menu update nothing else
+		menu_update = true;
+		break;
 	}
-	else if (menu_state == 1) {
-		std::cout << output;
-	}
-}
-
-static void init_menu() {
-	print_menu();
-}
-
-static void lzw() {
-	LZW e(input);
-	for (int v : e.output) {
-		output += std::to_string(v) += " ";
-	}
-	std::ofstream ofs(fPath_comp, std::ofstream::binary);
-	ofs.write((char*)&e.output, sizeof(e.output));
-	ofs.close();
-}
-
-static bool process_input() {
-	bool update_menu = false;
-	if (menu_state == 0) {
-		if (GetAsyncKeyState(VK_UP) && menu_index > 0) {
-			menu_index--;
-			update_menu = true;
-		}
-		else if (GetAsyncKeyState(VK_DOWN) && menu_index < menu_index_max) {
-			menu_index++;
-			update_menu = true;
-		}
-		else if (GetAsyncKeyState(VK_RIGHT)) {
-			switch (menu_index) {
-			case 0:
-				lzw();
-				menu_state++;
-				update_menu = true; 
-				break;
-			case 1:
-				exitProgram = true;
-				break;
-			}
-		}
-	}
-	else if (menu_state == 1) {
-		if (GetAsyncKeyState(VK_LEFT)) {
-			menu_state = 0;
-			update_menu = true;
-		}
-	}
-	return update_menu;
+	return menu_update;
 }
 
 int main()
 {
+	Menu* m = new Menu();
 	init_variables(); // defining starting variables
-	init_filestream(); // opening target file and filling input string
-	init_menu(); // printing menu once before the main loop starts
+	init_filestream(m); // opening target file and filling input string
 
-	while (!exitProgram) {
-
-		if (process_input()) // processes the input and returns true for updating the menu
-			print_menu();
-
+	while (!exitProgram) { // keeping the program open
+		if (main_loop(m)) { // returns true if a menu update is supposed to happen
+			m->print(); // print menu
+			wait(); // waiting after every input for stable control in menu
+		}
 	}
 
+	delete m; // deleting the menu object
 	return 0; // end of program obviously
 }

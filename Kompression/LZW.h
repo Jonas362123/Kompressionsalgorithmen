@@ -10,10 +10,8 @@ public:
 	std::vector<int> output; // the output as an integer array. vector makes an array with variable size
 
 private:
-	std::map<std::string, int> dict; // dictionary for storing indexes of character sequences
-	int dictSize = 256; // Size of the dictionary. already 256 because of filling them with 1 byte sequences
-	std::string entry;
-	void encode(std::string input); // this is where the fun begins
+	std::vector<int> encode(const std::string input); // this is where the fun begins
+	//std::string decode(const std::vector<int> input); // decoding for testing purposes
 
 };
 
