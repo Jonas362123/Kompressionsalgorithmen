@@ -17,7 +17,7 @@ void Menu::print() {
 		std::cout << "Encoder by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
 
 		if (fileError != 0)
-			std::cout << "Inputfilestream Error\n\n";
+			std::cout << "Filestream Error value: " << std::to_string(fileError) << " path: " << errorPath << "\n\n";
 
 		if (menu_index == 0) std::cout << ">";
 		std::cout << "\tLempel-Ziv-Welch\n\n";
@@ -34,7 +34,7 @@ void Menu::print() {
 		std::cout << "Encoder by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
 
 		if (fileError != 0)
-			std::cout << "Outputfilestream Error\npress [<-] to go back";
+			std::cout << "Filestream Error" << std::to_string(fileError) << " path: " << errorPath << "\npress [<-] to go back";
 		else
 			std::cout << "Successfully encoded to output file\npress [<-] to go back";
 
@@ -99,9 +99,10 @@ void Menu::setMenuState(int val)
 	menu_state = val;
 }
 
-void Menu::setfileError(int val)
+void Menu::setfileError(int val, std::string path)
 {
 	fileError = val;
+	errorPath = path;
 }
 
 void Menu::init()

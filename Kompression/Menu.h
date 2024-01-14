@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <iostream>
+#include <string>
 
 class Menu
 {
@@ -15,7 +16,7 @@ public:
 	void setMenuIndexMax(int val);
 	int getMenuState();
 	void setMenuState(int val);
-	void setfileError(int val);
+	void setfileError(int val, std::string path);
 	
 private:
 	void clear();
@@ -23,6 +24,7 @@ private:
 
 	//declaring class variables
 	int fileError;
+	std::string errorPath;
 	int menu_index;
 	int menu_index_max;
 	int menu_state;

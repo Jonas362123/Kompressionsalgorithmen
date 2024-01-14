@@ -5,6 +5,9 @@ Teile des Codes sind inspiriert von:
 https://www2.cs.duke.edu/csed/curious/compression/lzw.html (07.01.2024)
 http://web.mit.edu/6.02/www/s2012/handouts/3.pdf (07.01.2024)
 
+https://learn.microsoft.com/en-us/previous-versions/87zae4a3(v=vs.140)?redirectedfrom=MSDN (14.01.2024)
+https://learn.microsoft.com/de-de/windows/win32/api/shlobj_core/nf-shlobj_core-shgetspecialfolderpathw (14.01.2024)
+
 */
 
 
@@ -14,6 +17,8 @@ http://web.mit.edu/6.02/www/s2012/handouts/3.pdf (07.01.2024)
 #include <string>
 #include <sstream>
 #include <Windows.h>
+#include <atlstr.h>
+#include <ShlObj_core.h>
 #include "LZW.h"
 #include "Menu.h"
 
@@ -29,8 +34,12 @@ static void wait() {
 
 static void init_variables() { // defining starting variables
 	exitProgram = false;
-	filePath = "C:\\uncompressed.txt";
-	filePath_c = "C:\\compressed.bin";
+	TCHAR path_c[MAX_PATH];
+	std::string path;
+	SHGetSpecialFolderPathW(0, path_c, CSIDL_DESKTOP, false); // get Desktop folder path into char array
+	path = CW2A(path_c); // convert char array to string
+	filePath = path + "\\uncompressed.txt";
+	filePath_c = path + "\\compressed.bin";
 	input = "";
 }
 
@@ -39,7 +48,7 @@ static void init_filestream(Menu* m) {
 
 	fs.open(filePath, std::ifstream::in); // Datei zur Auslesung öffnen
 	if (!fs.is_open()) {
-		m->setfileError(1); // Falls der Pfad nicht existiert oder die Datei nicht geöffnet werden kann
+		m->setfileError(1, filePath); // Falls der Pfad nicht existiert oder die Datei nicht geöffnet werden kann
 		m->print();
 	}
 	std::stringstream ss;
@@ -53,10 +62,13 @@ static void lzw(Menu* m) {
 	LZW enc(input); // calls the lzw constructor
 	std::vector<int> vec = enc.output; // set the output to a local variable
 	std::ofstream ofs(filePath_c, std::ofstream::binary | std::ofstream::out); // outputfilestream for writing encoded data to a file
-	if (ofs.is_open())
-		ofs.write((char*)&vec[0], vec.size() * sizeof(int));
+	if (ofs.is_open()) {
+		for (size_t i = 0; i < vec.size(); i++)
+			ofs << (char*)&vec[i];
+		//ofs.write((char*)&vec[0], vec.size() * sizeof(int)); // resultet in 3 NULL characters being written after every symbol, increasing file size a lot
+	}
 	else
-		m->setfileError(2); // dont need another m->print(); because the menu is already being updated after the function
+		m->setfileError(2, filePath_c); // dont need another m->print(); because the menu is already being updated after the function
 	ofs.close(); // closing file
 }
 
