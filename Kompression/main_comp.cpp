@@ -8,6 +8,11 @@ http://web.mit.edu/6.02/www/s2012/handouts/3.pdf (07.01.2024)
 https://learn.microsoft.com/en-us/previous-versions/87zae4a3(v=vs.140)?redirectedfrom=MSDN (14.01.2024)
 https://learn.microsoft.com/de-de/windows/win32/api/shlobj_core/nf-shlobj_core-shgetspecialfolderpathw (14.01.2024)
 
+https://courses.cs.duke.edu/spring03/cps296.5/papers/ziv_lempel_1977_universal_algorithm.pdf (15.01.2024)
+https://www5.in.tum.de/lehre/vorlesungen/wipro/ws10/uebung/blatt11.pdf (15.01.2024)
+https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-wusp/fb98aa28-5cd7-407f-8869-a6cef1ff1ccb (15.01.2024)
+https://www.wikiwand.com/de/LZ77 (15.01.2024)
+
 */
 
 
@@ -19,8 +24,9 @@ https://learn.microsoft.com/de-de/windows/win32/api/shlobj_core/nf-shlobj_core-s
 #include <Windows.h>
 #include <atlstr.h>
 #include <ShlObj_core.h>
-#include "LZW.h"
 #include "Menu.h"
+#include "LZW.h"
+#include "LZ77.h"
 
 // declaring starting variables
 bool exitProgram;
@@ -58,13 +64,12 @@ static void init_filestream(Menu* m) {
 	fs.close(); // Important :)
 }
 
-static void lzw(Menu* m) {
-	LZW enc(input); // calls the lzw constructor
-	std::vector<int> vec = enc.output; // set the output to a local variable
+static void outputbin(Menu* m, std::vector<int> out) { // output the vector to binary
 	std::ofstream ofs(filePath_c, std::ofstream::binary | std::ofstream::out); // outputfilestream for writing encoded data to a file
 	if (ofs.is_open()) {
-		for (size_t i = 0; i < vec.size(); i++)
-			ofs << (char*)&vec[i];
+		for (size_t i = 0; i < out.size(); i++) {
+			ofs << (char*)&out[i];
+		}
 		//ofs.write((char*)&vec[0], vec.size() * sizeof(int)); // resultet in 3 NULL characters being written after every symbol, increasing file size a lot
 	}
 	else
@@ -72,23 +77,41 @@ static void lzw(Menu* m) {
 	ofs.close(); // closing file
 }
 
+static void lzw(Menu* m) {
+	LZW enc(input); // calls the lzw constructor
+	std::vector<int> out = enc.getOutput(); // set the output to a local variable
+	outputbin(m, out);
+}
+
+static void lz77(Menu* m) {
+	LZ77 enc(input, filePath_c); // calls the lz77 constructor
+}
+
 static bool main_loop(Menu* m) { // runs every frame the program is not sleeping
 	bool menu_update = false;
 	switch (m->process_input()) { // different output based on what key you press
 	case 0: // first menu option
+		m->print();
+		m->setMenuState(2);
 		lzw(m); // encode using lzw
 		menu_update = true;
 		break;
 	case 1: // second menu option
-		// lz77();
+		m->print();
+		m->setMenuState(2);
+		lz77(m); // encode using lz77
 		menu_update = true;
 		break;
 	case 2: // third menu option
-		// shannon();
+		//m->print();
+		m->setMenuState(2);
+		// shannon(m);
 		menu_update = true;
 		break;
 	case 3: // fourth menu option
-		// huffman();
+		//m->print();
+		m->setMenuState(2);
+		// huffman(m);
 		menu_update = true;
 		break;
 	case 4: // fifth menu option to exit

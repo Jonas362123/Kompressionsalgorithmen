@@ -14,7 +14,7 @@ Menu::Menu()
 void Menu::print() {
 	clear();
 	if (menu_state == 0) {
-		std::cout << "Encoder by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
+		std::cout << "Written by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
 
 		if (fileError != 0)
 			std::cout << "Filestream Error value: " << std::to_string(fileError) << " path: " << errorPath << "\n\n";
@@ -23,7 +23,7 @@ void Menu::print() {
 		std::cout << "\tLZW\t\t";
 
 		if (menu_index == 0) std::cout << "Lempel-Ziv-Welch-Algorithm (working as intended)\n\n";
-		else if (menu_index == 1) std::cout << "Lempel-Ziv 77 Algorithm (not implemented yet)\n\n";
+		else if (menu_index == 1) std::cout << "Lempel-Ziv 77 Algorithm (working as intended)\n\n";
 		else if (menu_index == 2) std::cout << "Shannon-Fano coding (not implemented yet)\n\n";
 		else if (menu_index == 3) std::cout << "Huffman coding (not implemented yet)\n\n";
 		else if (menu_index == 4) std::cout << "Exit the program\n\n";
@@ -38,7 +38,12 @@ void Menu::print() {
 		std::cout << "\tX\n";
 	}
 	else if (menu_state == 1) {
-		std::cout << "Encoder by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
+		std::cout << "Written by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
+
+		std::cout << "Encoding...\n";
+	}
+	else if (menu_state == 2) {
+		std::cout << "Written by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
 
 		if (fileError != 0)
 			std::cout << "Filestream Error" << std::to_string(fileError) << " path: " << errorPath << "\npress [<-] to go back";
@@ -48,7 +53,7 @@ void Menu::print() {
 				std::cout << "Successfully encoded to output file\npress [<-] to go back";
 				break;
 			case 1:
-				std::cout << "Not implemented yet\npress [<-] to go back";
+				std::cout << "Successfully encoded to output file\npress [<-] to go back";
 				break;
 			case 2:
 				std::cout << "Not implemented yet\npress [<-] to go back";
@@ -79,9 +84,9 @@ int Menu::process_input()
 			out = menu_index;
 		}
 	}
-	else if (menu_state == 1) {
+	else if (menu_state == 2) {
 		if (GetAsyncKeyState(VK_LEFT)) {
-			menu_state--;
+			menu_state = 0;
 			out = 6;
 		}
 	}
