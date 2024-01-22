@@ -24,16 +24,16 @@ void Menu::print() {
 
 		if (menu_index == 0) std::cout << "Lempel-Ziv-Welch-Algorithm (working as intended)\n\n";
 		else if (menu_index == 1) std::cout << "Lempel-Ziv 77 Algorithm (working as intended)\n\n";
-		else if (menu_index == 2) std::cout << "Shannon-Fano coding (not implemented yet)\n\n";
-		else if (menu_index == 3) std::cout << "Huffman coding (not implemented yet)\n\n";
+		else if (menu_index == 2) std::cout << "Huffman coding (working as intended)\n\n";
+		else if (menu_index == 3) std::cout << "Shannon-Fano coding (not implemented yet)\n\n";
 		else if (menu_index == 4) std::cout << "Exit the program\n\n";
 
 		if (menu_index == 1) std::cout << ">";
 		std::cout << "\tLZ77\n\n";
 		if (menu_index == 2) std::cout << ">";
-		std::cout << "\tShannon\n\n";
-		if (menu_index == 3) std::cout << ">";
 		std::cout << "\tHuffman\n\n";
+		if (menu_index == 3) std::cout << ">";
+		std::cout << "\tShannon\n\n";
 		if (menu_index == 4) std::cout << ">";
 		std::cout << "\tX\n";
 	}
@@ -56,7 +56,7 @@ void Menu::print() {
 				std::cout << "Successfully encoded to output file\npress [<-] to go back";
 				break;
 			case 2:
-				std::cout << "Not implemented yet\npress [<-] to go back";
+				std::cout << "Successfully encoded to output file\npress [<-] to go back";
 				break;
 			case 3:
 				std::cout << "Not implemented yet\npress [<-] to go back";

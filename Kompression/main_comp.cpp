@@ -13,6 +13,8 @@ https://www5.in.tum.de/lehre/vorlesungen/wipro/ws10/uebung/blatt11.pdf (15.01.20
 https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-wusp/fb98aa28-5cd7-407f-8869-a6cef1ff1ccb (15.01.2024)
 https://www.wikiwand.com/de/LZ77 (15.01.2024)
 
+https://einstein.informatik.uni-oldenburg.de/rechnernetze/huffmann.htm (21.01.2024)
+https://hwlang.de/algorithmen/code/huffman/huffman.htm (21.01.2024)
 */
 
 
@@ -27,6 +29,7 @@ https://www.wikiwand.com/de/LZ77 (15.01.2024)
 #include "Menu.h"
 #include "LZW.h"
 #include "LZ77.h"
+#include "Huffman.h"
 
 // declaring starting variables
 bool exitProgram;
@@ -70,7 +73,6 @@ static void outputbin(Menu* m, std::vector<int> out) { // output the vector to b
 		for (size_t i = 0; i < out.size(); i++) {
 			ofs << (char*)&out[i];
 		}
-		//ofs.write((char*)&vec[0], vec.size() * sizeof(int)); // resultet in 3 NULL characters being written after every symbol, increasing file size a lot
 	}
 	else
 		m->setfileError(2, filePath_c); // dont need another m->print(); because the menu is already being updated after the function
@@ -79,12 +81,48 @@ static void outputbin(Menu* m, std::vector<int> out) { // output the vector to b
 
 static void lzw(Menu* m) {
 	LZW enc(input); // calls the lzw constructor
-	std::vector<int> out = enc.getOutput(); // set the output to a local variable
+	std::vector<int> out = enc.getOutput(); // get the output
+
 	outputbin(m, out);
 }
 
 static void lz77(Menu* m) {
 	LZ77 enc(input, filePath_c); // calls the lz77 constructor
+}
+
+static void huffman(Menu* m) {
+	Huffman enc(input); // calls the huffman constructor
+	std::map<char, std::string> out = enc.getOutput(); // get the output
+	std::string str;
+	for (char c : input) {
+		std::map<char, std::string>::iterator it = out.find(c);
+		str += it->second;
+	}
+	
+	std::vector<unsigned char> byte_array;
+
+	std::cout << str.length() << " ";
+
+	while (str.length() % 8 > 0)
+		str += "0";
+
+	std::cout << str.length() << " ";
+
+	for (int i = 0; i < str.length(); i += 8) {
+		std::string byte_str = str.substr(i, 8);
+		unsigned char byte = std::stoi(byte_str, nullptr, 2);
+		byte_array.push_back(byte);
+	}
+
+	std::ofstream ofs(filePath_c, std::ofstream::binary | std::ofstream::out); // outputfilestream for writing encoded data to a file
+	if (ofs.is_open()) {
+		for (size_t i = 0; i < byte_array.size(); i++) {
+			ofs << byte_array[i];
+		}
+	}
+	else
+		m->setfileError(2, filePath_c); // dont need another m->print(); because the menu is already being updated after the function
+	ofs.close(); // closing file
 }
 
 static bool main_loop(Menu* m) { // runs every frame the program is not sleeping
@@ -103,15 +141,15 @@ static bool main_loop(Menu* m) { // runs every frame the program is not sleeping
 		menu_update = true;
 		break;
 	case 2: // third menu option
-		//m->print();
+		m->print();
 		m->setMenuState(2);
-		// shannon(m);
+		huffman(m);
 		menu_update = true;
 		break;
 	case 3: // fourth menu option
 		//m->print();
 		m->setMenuState(2);
-		// huffman(m);
+		// shannon(m);
 		menu_update = true;
 		break;
 	case 4: // fifth menu option to exit
