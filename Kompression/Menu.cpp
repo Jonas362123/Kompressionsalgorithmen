@@ -1,14 +1,24 @@
 #include "Menu.h"
-
+#include "os.h"
 
 
 void Menu::clear() {
-	system("cls"); // clearing the screen
+	if (os::get_system() == os::system::win)
+		system("cls"); // clearing the screen
+	else if (os::get_system() == os::system::lin){
+		system("clear");
+	}
 }
 
 Menu::Menu()
 {
 	init();
+}
+
+void Menu::exit()
+{
+	clear();
+	std::cout << "Successfully exited";
 }
 
 void Menu::print() {
@@ -19,23 +29,12 @@ void Menu::print() {
 		if (fileError != 0)
 			std::cout << "Filestream Error value: " << std::to_string(fileError) << " path: " << errorPath << "\n\n";
 
-		if (menu_index == 0) std::cout << ">";
-		std::cout << "\tLZW\t\t";
-
-		if (menu_index == 0) std::cout << "Lempel-Ziv-Welch-Algorithm (working as intended)\n\n";
-		else if (menu_index == 1) std::cout << "Lempel-Ziv 77 Algorithm (working as intended)\n\n";
-		else if (menu_index == 2) std::cout << "Huffman coding (working as intended)\n\n";
-		else if (menu_index == 3) std::cout << "Shannon-Fano coding (not implemented yet)\n\n";
-		else if (menu_index == 4) std::cout << "Exit the program\n\n";
-
-		if (menu_index == 1) std::cout << ">";
-		std::cout << "\tLZ77\n\n";
-		if (menu_index == 2) std::cout << ">";
-		std::cout << "\tHuffman\n\n";
-		if (menu_index == 3) std::cout << ">";
-		std::cout << "\tShannon\n\n";
-		if (menu_index == 4) std::cout << ">";
-		std::cout << "\tX\n";
+		std::cout << "1:\tLempel-Ziv-Welch-Algorithm (working as intended)\n\n";
+		std::cout << "2:\tLempel-Ziv 77 Algorithm (working as intended)\n\n";
+		std::cout << "3:\tHuffman coding (working as intended)\n\n";
+		std::cout << "4:\tShannon-Fano coding (not implemented yet)\n\n";
+		std::cout << "5:\tExit the program\n";
+		std::cout << "Select: ";
 	}
 	else if (menu_state == 1) {
 		std::cout << "Written by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
@@ -45,23 +44,13 @@ void Menu::print() {
 	else if (menu_state == 2) {
 		std::cout << "Written by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
 
-		if (fileError != 0)
-			std::cout << "Filestream Error" << std::to_string(fileError) << " path: " << errorPath << "\npress [<-] to go back";
+		if (fileError != 0) {
+			std::cout << "Filestream Error" << std::to_string(fileError) << " path: " << errorPath << "\nEnter [9] to go back\n";
+			std::cout << "Select: ";
+		}
 		else {
-			switch (menu_index) {
-			case 0:
-				std::cout << "Successfully encoded to output file\npress [<-] to go back";
-				break;
-			case 1:
-				std::cout << "Successfully encoded to output file\npress [<-] to go back";
-				break;
-			case 2:
-				std::cout << "Successfully encoded to output file\npress [<-] to go back";
-				break;
-			case 3:
-				std::cout << "Not implemented yet\npress [<-] to go back";
-				break;
-			}
+			std::cout << "Successfully encoded to output file\nEnter [9] to go back\n";
+			std::cout << "Select: ";
 		}
 	}
 }
@@ -69,49 +58,23 @@ void Menu::print() {
 int Menu::process_input()
 {
 	int out = 5;
+	int in = 0;
+	std::cin >> in;
 
 	if (menu_state == 0) {
-		if (GetAsyncKeyState(VK_UP) && menu_index > 0) {
-			menu_index--;
-			out = 6;
-		}
-		else if (GetAsyncKeyState(VK_DOWN) && menu_index < menu_index_max) {
-			menu_index++;
-			out = 6;
-		}
-		else if (GetAsyncKeyState(VK_RIGHT)) {
+		if (in < 6 && in > 0) {
 			menu_state++;
-			out = menu_index;
+			out = in - 1;
 		}
 	}
 	else if (menu_state == 2) {
-		if (GetAsyncKeyState(VK_LEFT)) {
+		if (in == 9) {
 			menu_state = 0;
 			out = 6;
 		}
 	}
 
 	return out;
-}
-
-int Menu::getMenuIndex()
-{
-	return menu_index;
-}
-
-void Menu::setMenuIndex(int val)
-{
-	menu_index = val;
-}
-
-int Menu::getMenuIndexMax()
-{
-	return menu_index_max;
-}
-
-void Menu::setMenuIndexMax(int val)
-{
-	menu_index_max = val;
 }
 
 int Menu::getMenuState()
@@ -133,8 +96,6 @@ void Menu::setfileError(int val, std::string path)
 void Menu::init()
 { // defining class variables
 	fileError = 0;
-	menu_index = 0;
-	menu_index_max = 4;
 	menu_state = 0;
 
 	print(); // printing menu once before the main loop starts

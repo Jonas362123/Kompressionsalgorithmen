@@ -23,9 +23,6 @@ https://hwlang.de/algorithmen/code/huffman/huffman.htm (21.01.2024)
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <Windows.h>
-#include <atlstr.h>
-#include <ShlObj_core.h>
 #include "Menu.h"
 #include "LZW.h"
 #include "LZ77.h"
@@ -37,27 +34,19 @@ std::string filePath;
 std::string filePath_c;
 std::string input;
 
-static void wait() {
-	Sleep(150);
-}
-
-static void init_variables() { // defining starting variables
+static void init_variables(char **argv) { // defining starting variables
 	exitProgram = false;
-	TCHAR path_c[MAX_PATH];
-	std::string path;
-	SHGetSpecialFolderPathW(0, path_c, CSIDL_DESKTOP, false); // get Desktop folder path into char array
-	path = CW2A(path_c); // convert char array to string
-	filePath = path + "\\uncompressed.txt";
-	filePath_c = path + "\\compressed.bin";
+	filePath = argv[1];
+	filePath_c = argv[2];
 	input = "";
 }
 
 static void init_filestream(Menu* m) {
 	std::ifstream fs;
 
-	fs.open(filePath, std::ifstream::in); // Datei zur Auslesung öffnen
+	fs.open(filePath, std::ifstream::in); // Datei zur Auslesung ï¿½ffnen
 	if (!fs.is_open()) {
-		m->setfileError(1, filePath); // Falls der Pfad nicht existiert oder die Datei nicht geöffnet werden kann
+		m->setfileError(1, filePath); // Falls der Pfad nicht existiert oder die Datei nicht geï¿½ffnet werden kann
 		m->print();
 	}
 	std::stringstream ss;
@@ -164,19 +153,24 @@ static bool main_loop(Menu* m) { // runs every frame the program is not sleeping
 	return menu_update;
 }
 
-int main()
+int main(int argc, char **argv)
 {
+	if (argc < 2) {
+		std::cout << "not enough arguments: [Inputfile] [Outputfile]";
+		return 0;
+	}
+
 	Menu* m = new Menu();
-	init_variables(); // defining starting variables
+	init_variables(argv); // defining starting variables
 	init_filestream(m); // opening target file and filling input string
 
 	while (!exitProgram) { // keeping the program open
 		if (main_loop(m)) { // returns true if a menu update is supposed to happen
 			m->print(); // print menu
-			wait(); // waiting after every input for stable control in menu
 		}
 	}
 
+	m->exit();
 	delete m; // deleting the menu object
 	return 0; // end of program obviously
 }
