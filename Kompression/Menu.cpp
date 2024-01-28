@@ -32,8 +32,7 @@ void Menu::print() {
 		std::cout << "1:\tLempel-Ziv-Welch-Algorithm (working as intended)\n\n";
 		std::cout << "2:\tLempel-Ziv 77 Algorithm (working as intended)\n\n";
 		std::cout << "3:\tHuffman coding (working as intended)\n\n";
-		std::cout << "4:\tShannon-Fano coding (not implemented yet)\n\n";
-		std::cout << "5:\tExit the program\n";
+		std::cout << "4:\tExit the program\n";
 		std::cout << "Select: ";
 	}
 	else if (menu_state == 1) {
@@ -57,12 +56,12 @@ void Menu::print() {
 
 int Menu::process_input()
 {
-	int out = 5;
+	int out = 4;
 	int in = 0;
 	std::cin >> in;
 
 	if (menu_state == 0) {
-		if (in < 6 && in > 0) {
+		if (in < 5 && in > 0) {
 			menu_state++;
 			out = in - 1;
 		}
@@ -70,7 +69,7 @@ int Menu::process_input()
 	else if (menu_state == 2) {
 		if (in == 9) {
 			menu_state = 0;
-			out = 6;
+			out = 5;
 		}
 	}
 

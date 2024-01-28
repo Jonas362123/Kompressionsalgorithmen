@@ -15,6 +15,9 @@ https://www.wikiwand.com/de/LZ77 (15.01.2024)
 
 https://einstein.informatik.uni-oldenburg.de/rechnernetze/huffmann.htm (21.01.2024)
 https://hwlang.de/algorithmen/code/huffman/huffman.htm (21.01.2024)
+
+https://www.geeksforgeeks.org/shannon-fano-algorithm-for-data-compression/ (28.01.2024)
+https://de.wikibooks.org/wiki/Datenkompression:_Verlustfreie_Verfahren:_Statistische_Verfahren:_Shannon-Fano_Codierung (28.01.2024)
 */
 
 
@@ -68,20 +71,7 @@ static void outputbin(Menu* m, std::vector<int> out) { // output the vector to b
 	ofs.close(); // closing file
 }
 
-static void lzw(Menu* m) {
-	LZW enc(input); // calls the lzw constructor
-	std::vector<int> out = enc.getOutput(); // get the output
-
-	outputbin(m, out);
-}
-
-static void lz77(Menu* m) {
-	LZ77 enc(input, filePath_c); // calls the lz77 constructor
-}
-
-static void huffman(Menu* m) {
-	Huffman enc(input); // calls the huffman constructor
-	std::map<char, std::string> out = enc.getOutput(); // get the output
+static void outputbin2(Menu* m, std::map<char, std::string> out) {
 	std::string str;
 	for (char c : input) {
 		std::map<char, std::string>::iterator it = out.find(c);
@@ -114,6 +104,23 @@ static void huffman(Menu* m) {
 	ofs.close(); // closing file
 }
 
+static void lzw(Menu* m) {
+	LZW enc(input); // calls the lzw constructor
+	std::vector<int> out = enc.getOutput(); // get the output
+
+	outputbin(m, out);
+}
+
+static void lz77(Menu* m) {
+	LZ77 enc(input, filePath_c); // calls the lz77 constructor
+}
+
+static void huffman(Menu* m) {
+	Huffman enc(input); // calls the huffman constructor
+	std::map<char, std::string> out = enc.getOutput(); // get the output
+	outputbin2(m, out);
+}
+
 static bool main_loop(Menu* m) { // runs every frame the program is not sleeping
 	bool menu_update = false;
 	switch (m->process_input()) { // different output based on what key you press
@@ -132,21 +139,15 @@ static bool main_loop(Menu* m) { // runs every frame the program is not sleeping
 	case 2: // third menu option
 		m->print();
 		m->setMenuState(2);
-		huffman(m);
+		huffman(m); // encode using huffman
 		menu_update = true;
 		break;
-	case 3: // fourth menu option
-		//m->print();
-		m->setMenuState(2);
-		// shannon(m);
-		menu_update = true;
-		break;
-	case 4: // fifth menu option to exit
+	case 3: // fourth menu option to exit
 		exitProgram = true; // breaks the main loop to terminate the program
 		break;
-	case 5: // no menu update (nothing happens)
+	case 4: // no menu update (nothing happens)
 		break;
-	case 6: // only menu update nothing else
+	case 5: // only menu update nothing else
 		menu_update = true;
 		break;
 	}
