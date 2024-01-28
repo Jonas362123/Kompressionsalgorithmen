@@ -10,15 +10,16 @@ https://en.cppreference.com/w/cpp/container/map
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <windows.h>
 #include <map>
+
+bool win = false;
 
 bool exitProgram;
 bool showContent;
 bool showUniqueWords;
-int w_count; // Wörter
+int w_count; // Wï¿½rter
 int l_count; // Buchstaben/Letter
-int non_alnum; // Count für nicht alphanumerische Zeichen
+int non_alnum; // Count fï¿½r nicht alphanumerische Zeichen
 std::string str;
 
 std::map<std::string, int> m; // map for storing words {word, count}
@@ -52,26 +53,31 @@ static bool countWords() {
 }
 
 static void print() {
-    std::cout << "Analyser by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
-
     if (showContent)
         std::cout << str << "\n";
-
-    std::cout << "Wordcount: " << std::to_string(w_count) // print amount of words
-        << "\nLettercount: " << std::to_string(l_count) // print amount of letters
-        << "\nAverage wordlength: " << std::to_string((float)l_count / (float)w_count) // print average amount of letters in a word
-        << "\nUnique words: " << std::to_string(m.size()) // print number of elements in the map (amount of unique words)
-        << "\nNon alphanumeric: " << std::to_string(non_alnum); // print amount of non alphanumeric
 
     if (showUniqueWords) {
         std::cout << "\n\n";
         for (auto& am : m) // iterate through the map
             std::cout << am.first << ": " << am.second << "\n"; // print every unique word and how often they are in the text
     }
+
+    std::cout << "\nAnalyser by Jonas Ramrath | https://github.com/Jonas362123/Kompressionsalgorithmen\n\n";
+
+    std::cout << "Wordcount: " << std::to_string(w_count) // print amount of words
+        << "\nLettercount: " << std::to_string(l_count) // print amount of letters
+        << "\nAverage wordlength: " << std::to_string((float)l_count / (float)w_count) // print average amount of letters in a word
+        << "\nUnique words: " << std::to_string(m.size()) // print number of elements in the map (amount of unique words)
+        << "\nNon alphanumeric: " << std::to_string(non_alnum); // print amount of non alphanumeric
 }
 
-int main()
+int main(int argc, char** argv)
 {
+    if (argc < 1) {
+        std::cout << "not enough arguments: [Inputfile]";
+        return 0;
+    }
+
     exitProgram = false;
     showContent = false;
     showUniqueWords = true;
@@ -80,12 +86,12 @@ int main()
     str = "";
 
     std::fstream fs;
-    std::string filePath = "C:\\uncompressed.txt"; // Pfad zur Datei
+    std::string filePath = argv[1]; // Pfad zur Datei
     std::string line = "";
 
-    fs.open(filePath, std::ios_base::in); // Datei zur Auslesung öffnen
+    fs.open(filePath, std::ios_base::in); // Datei zur Auslesung ï¿½ffnen
     if (!fs.is_open())
-        std::cout << "failed to open file"; // Falls der Pfad nicht existiert oder die Datei nicht geöffnet werden kann
+        std::cout << "failed to open file"; // Falls der Pfad nicht existiert oder die Datei nicht geï¿½ffnet werden kann
 
     while (std::getline(fs, line)) { // fill content line by line
         str += line += "\n";
@@ -111,9 +117,19 @@ int main()
 
     print();
 
+    std::cout << "\ntype [0] to exit\n:";
+
     while (!exitProgram) {
-        if (GetAsyncKeyState(VK_F1)) exitProgram = true; // only exit if key is pressed
+        int in = 1;
+        std::cin >> in;
+        if (in == 0) exitProgram = true; // only exit if key is pressed
     }
+
+    if (win)
+        system("cls");
+    else 
+        system("clear");
+    std::cout << "Successfully exited";
 
     return 0; // end of program obviously
 }
