@@ -369,3 +369,7 @@ program
 
 # vscode
 .vscode/
+
+# vstudio
+*.vcxproj
+*.vcxproj.filters
