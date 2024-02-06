@@ -12,7 +12,7 @@ https://en.cppreference.com/w/cpp/container/map
 #include <string>
 #include <map>
 
-bool win = false;
+bool win = true;
 
 bool exitProgram;
 bool showContent;

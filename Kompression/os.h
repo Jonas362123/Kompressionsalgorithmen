@@ -5,7 +5,7 @@ namespace os {
     };
 
 
-    system sys = system::lin;
+    system sys = system::win;
 
 
     static system get_system() {
