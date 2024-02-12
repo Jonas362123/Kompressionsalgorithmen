@@ -1,0 +1,121 @@
+Woyzeck
+https://www.projekt-gutenberg.org/buechner/woyzeck/chap02.html
+
+Wordcount: 6163
+Lettercount: 28023
+Average wordlength: 4.546974
+Unique words: 1617 | 26,23722213207853 % of Wordcount
+Non alphanumeric: 3618 | 12,91082325232844 % of Lettercount
+
+39.029 Bytes
+
+LZW
+21.972 Bytes
+56,29659996412924 %
+
+LZ77
+27.610 Bytes
+70,74226856952522 %
+
+Huffman
+23.322 Bytes
+59,7555663737221 %
+
+
+
+Lutherbibel 1912
+https://www.sermon-online.com/de/contents/6068
+
+Wordcount: 796937
+Lettercount: 3693166
+Average wordlength: 4.634201
+Unique words: 50125 | 06,28970671458346 % of Wordcount
+Non alphanumeric: 396907 | 10,74706633820413 % of Lettercount
+
+4.930.320 Bytes
+
+LZW
+1.824.292 Bytes
+37,00149280371254 %
+
+LZ77
+320.262 Bytes
+06,49576498077204 %
+
+Huffman
+2.975.492 Bytes
+60,35089000308296 %
+
+
+
+Bambi
+https://www.projekt-gutenberg.org/salten/bambi/chap001.html
+
+Wordcount: 39447
+Lettercount: 185423
+Average wordlength: 4.700560
+Unique words: 5153 | 13,06309732045529 % of Wordcount
+Non alphanumeric: 21416 | 11,54980773690427 % of Lettercount
+
+251.669 Bytes
+
+LZW
+104.880 Bytes
+41,67378580595941 %
+
+LZ77
+177.738 Bytes
+70,62371607150662 %
+
+Huffman
+144.896 Bytes
+57,574035737417 %
+
+
+Eine Kartoffelkomödie
+https://www.projekt-gutenberg.org/hoffmanh/kartoffl/kartoffl.html
+
+Wordcount: 8304
+Lettercount: 42065
+Average wordlength: 5.065631
+Unique words: 2532 | 30,49132947976879 % of Wordcount
+Non alphanumeric: 4576 | 10,8784024723642 % of Lettercount
+
+56.942 Bytes
+
+LZW
+30.964 Bytes
+54,37813915914439 %
+
+LZ77
+41.562 Bytes
+72,99006006111482 %
+
+Huffman
+33.701 Bytes
+59,18478451757929 %
+
+
+
+C. Iuli Caesaris De Bello Gallico, I-IV by Julius Caesar
+https://www.gutenberg.org/ebooks/218
+
+Wordcount: 20511
+Lettercount: 123227
+Average wordlength: 6.007849
+Unique words: 5672 | 27,65345424406416 % of Wordcount
+Non alphanumeric: 3141 | 02,54895436876659 % of Lettercount
+
+149.818 Bytes
+
+LZW
+68.095 Bytes
+45,45181486870736 %
+
+LZ77
+107.214 Bytes
+71,56282956654074 %
+
+Huffman
+79.555 Bytes
+53,10109599647572 %
