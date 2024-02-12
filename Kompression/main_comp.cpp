@@ -5,9 +5,6 @@ Teile des Codes sind inspiriert von:
 https://www2.cs.duke.edu/csed/curious/compression/lzw.html (07.01.2024)
 http://web.mit.edu/6.02/www/s2012/handouts/3.pdf (07.01.2024)
 
-https://learn.microsoft.com/en-us/previous-versions/87zae4a3(v=vs.140)?redirectedfrom=MSDN (14.01.2024)
-https://learn.microsoft.com/de-de/windows/win32/api/shlobj_core/nf-shlobj_core-shgetspecialfolderpathw (14.01.2024)
-
 https://courses.cs.duke.edu/spring03/cps296.5/papers/ziv_lempel_1977_universal_algorithm.pdf (15.01.2024)
 https://www5.in.tum.de/lehre/vorlesungen/wipro/ws10/uebung/blatt11.pdf (15.01.2024)
 https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-wusp/fb98aa28-5cd7-407f-8869-a6cef1ff1ccb (15.01.2024)
@@ -15,9 +12,6 @@ https://www.wikiwand.com/de/LZ77 (15.01.2024)
 
 https://einstein.informatik.uni-oldenburg.de/rechnernetze/huffmann.htm (21.01.2024)
 https://hwlang.de/algorithmen/code/huffman/huffman.htm (21.01.2024)
-
-https://www.geeksforgeeks.org/shannon-fano-algorithm-for-data-compression/ (28.01.2024)
-https://de.wikibooks.org/wiki/Datenkompression:_Verlustfreie_Verfahren:_Statistische_Verfahren:_Shannon-Fano_Codierung (28.01.2024)
 */
 
 
