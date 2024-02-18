@@ -2,9 +2,6 @@
 
 Huffman::Huffman(std::string input)
 {
-	freq.clear();
-    output.clear();
-
     for (int i = 0; i < input.size(); i++) {
         if (freq.count(input[i]) == 0) { // check if the symbol is not in the map
             freq.insert({ input[i], 1}); // insert into the map with a count of 1
